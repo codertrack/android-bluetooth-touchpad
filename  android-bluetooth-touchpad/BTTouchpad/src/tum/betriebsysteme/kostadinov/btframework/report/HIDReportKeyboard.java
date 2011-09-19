@@ -20,7 +20,11 @@
 
 package tum.betriebsysteme.kostadinov.btframework.report;
 
+import android.util.Log;
+
 public class HIDReportKeyboard extends HIDReport {
+	
+	public static final String TAG = "KEYBOARD_REPORT";
 	
 	public static final int LEFT_SHIFT_MODIFIER = 0x02;
 	
@@ -30,17 +34,27 @@ public class HIDReportKeyboard extends HIDReport {
 		(byte) 0x01, //1	REPORT ID 
 		(byte) 0x00, //2 	MODIFIER
 		(byte) 0x00, //3 	RESERVED, DO NOT USE
- 		(byte) 0x00, //4 	KEYCODE 1
-		(byte) 0x00, //5	KEYCODE 2
-		(byte) 0x00, //6	KEYCODE 3
-		(byte) 0x00, //7	KEYCODE 4
-		(byte) 0x00, //8	KEYCODE 5
-		(byte) 0x00  //9	KEYCODE 6
+ 		(byte) 0x00, //4 	KEYCODE 0
+		(byte) 0x00, //5	KEYCODE 1
+		(byte) 0x00, //6	KEYCODE 2
+		(byte) 0x00, //7	KEYCODE 3
+		(byte) 0x00, //8	KEYCODE 4
+		(byte) 0x00  //9	KEYCODE 5
 		
 	};
 	
 	public void setModifier(int modifier){
 		report[2] = (byte) modifier; 
+	}
+	
+	public int getModifier(){
+		return report[2];
+	}
+	
+	public int getKeycode(int index){
+		if(index >= 0 && index < 6 ){
+			return report[index+4];
+		}else return 0xffff;
 	}
 	
 	public void setSingleKeycode(int keyCode){

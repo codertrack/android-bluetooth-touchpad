@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:paddingLeft="80dip"
+	android:paddingRight="80dip"
+	android:paddingTop="40dip"
+	android:paddingBottom="40dip"
+>
+
+<Button
+	android:layout_width="100dip"
+	android:layout_height="100dip"
+	android:id="@+id/gamepad_upper_left"
+	android:text="UL"
+	android:layout_alignParentTop="true"
+	android:layout_alignParentLeft="true"
+/>
+<Button
+	android:layout_width="100dip"
+	android:layout_height="100dip"
+	android:id="@+id/gamepad_bottom_left"
+	android:text="BL"
+	android:layout_alignParentBottom="true"
+	android:layout_alignParentLeft="true"
+/>
+
+
+<Button
+	android:layout_width="100dip"
+	android:layout_height="100dip"
+	android:id="@+id/gamepad_upper_right"
+	android:text="UR"
+	android:layout_alignParentTop="true"
+	android:layout_alignParentRight="true"
+/>
+<Button
+	android:layout_width="100dip"
+	android:layout_height="100dip"
+	android:id="@+id/gamepad_bottom_right"
+	android:text="BR"
+	android:layout_alignParentBottom="true"
+	android:layout_alignParentRight="true"
+/>
+
+</RelativeLayout>

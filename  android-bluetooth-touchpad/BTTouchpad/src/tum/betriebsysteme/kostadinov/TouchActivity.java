@@ -29,6 +29,7 @@ import tum.betriebsysteme.kostadinov.ui.DeviceList;
 import tum.betriebsysteme.kostadinov.ui.OptionList;
 import tum.betriebsysteme.kostadinov.ui.SDPList;
 import tum.betriebsysteme.kostadinov.ui.SDPList.SDPListListener;
+import tum.betriebsysteme.kostadinov.ui.options.Gamepad;
 import tum.betriebsysteme.kostadinov.ui.options.Keyboard;
 import tum.betriebsysteme.kostadinov.ui.options.Option;
 import tum.betriebsysteme.kostadinov.ui.options.Paintpad;
@@ -329,10 +330,15 @@ public class TouchActivity extends Activity implements
 			break;
 		}
 		
-		
+		case Option.OPTION_GAMEPAD_INDEX: {
+			
+			this.currentOption = new Gamepad(this);
+			this.currentOption.initOptionUI();
+			
+			break;
 		}
 		 
-		
+		}
 		
 	} 
      
@@ -448,10 +454,42 @@ public class TouchActivity extends Activity implements
 		return true;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see android.view.View.OnTouchListener#onTouch(android.view.View, android.view.MotionEvent)
+	 * 
+	 *   View v = getCurrentFocus();
+	    boolean ret = super.dispatchTouchEvent(event);
+
+	    if (v instanceof EditText) {
+	        View w = getCurrentFocus();
+	        int scrcoords[] = new int[2];
+	        w.getLocationOnScreen(scrcoords);
+	        float x = event.getRawX() + w.getLeft() - scrcoords[0];
+	        float y = event.getRawY() + w.getTop() - scrcoords[1];
+
+	        Log.d("Activity", "Touch event "+event.getRawX()+","+event.getRawY()+" "+x+","+y+" rect "+w.getLeft()+","+w.getTop()+","+w.getRight()+","+w.getBottom()+" coords "+scrcoords[0]+","+scrcoords[1]);
+	        if (event.getAction() == MotionEvent.ACTION_UP && (x < w.getLeft() || x >= w.getRight() || y < w.getTop() || y > w.getBottom()) ) { 
+
+	        	ActivityResource.hideKeyboard();
+	        }
+	    }
+	return ret;
 	
+	 */
 	
-	
-	
-	
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent event) {
+		
+		if (		currentOption != null &&
+					currentOption instanceof Gamepad	){
+			
+		((Gamepad) currentOption).handleEvent(event);	
+		
+		}
+		
+		return super.dispatchTouchEvent(event);
+		
+	}
 	
 }

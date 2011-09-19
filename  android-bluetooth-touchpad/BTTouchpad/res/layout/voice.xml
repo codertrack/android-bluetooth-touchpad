@@ -4,8 +4,8 @@
 	android:layout_height="fill_parent"
 >
 <Button
-	android:layout_width="100dip"
-	android:layout_height="100dip"
+	android:layout_width="150dip"
+	android:layout_height="150dip"
 	android:id="@+id/voice_button"
 	android:layout_centerInParent="true"
 />
