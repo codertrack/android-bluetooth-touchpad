@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+<TextView
+	android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+	android:layout_below="@+id/button_containers"
+	android:background="#000000"
+	android:id="@+id/pointer_reset_button"
+	android:gravity="center"
+    android:textColor="#C7C0C0"
+    android:textSize="25dip"
+    android:text="Point the phone toward the monitor and press long click here to set initial position."
+/>    
+<TableLayout
+	android:layout_width="fill_parent"
+	android:layout_height="200dip"
+	android:stretchColumns="*"
+	android:background="#C7C0C0"
+	android:paddingBottom="5dip"
+	android:id="@+id/button_containers"
+	android:layout_alignParentTop="true"
+>
+<TableRow>
+<View
+	android:background="#000000"
+	android:id="@+id/pointer_button_left"
+	android:layout_marginRight="2.5dip"
+/>
+<View
+	android:background="#000000"
+	android:id="@+id/pointer_button_right"
+	android:layout_marginLeft="2.5dip"
+/>
+</TableRow>
+</TableLayout>
+</RelativeLayout>

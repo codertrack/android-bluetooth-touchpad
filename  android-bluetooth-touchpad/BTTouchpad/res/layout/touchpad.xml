@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/touchpad"
+    >
+<View
+	android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+	android:layout_above ="@+id/button_containers"
+	android:layout_toLeftOf="@+id/touchpad_scorllview"
+	android:background="#000000"
+	android:id="@+id/touchpad_touchview"
+/>
+<View
+	android:layout_width="60dip"
+    android:layout_height="fill_parent"
+	android:layout_above ="@+id/button_containers"
+	android:background="#000000"
+	android:id="@+id/touchpad_scorllview"
+	android:layout_alignParentRight="true"
+/>
+<TableLayout
+	android:layout_width="fill_parent"
+	android:layout_height="70dip"
+	android:stretchColumns="*"
+	android:background="#C7C0C0"
+	android:paddingTop="5dip"
+	android:id="@+id/button_containers"
+	android:layout_alignParentBottom="true"
+>
+<TableRow>
+<View
+	android:background="#000000"
+	android:id="@+id/touchpad_button_left"
+	android:layout_marginRight="2.5dip"
+/>
+<View
+	android:background="#000000"
+	android:id="@+id/touchpad_button_right"
+	android:layout_marginLeft="2.5dip"
+/>
+</TableRow>
+</TableLayout>
+</RelativeLayout>

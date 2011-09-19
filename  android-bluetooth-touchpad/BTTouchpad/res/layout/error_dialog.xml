@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="200dip"
+    android:layout_height="200dip"
+   >
+
+<TextView
+ 	android:layout_width="fill_parent"
+    android:layout_height="150dip"
+    android:id="@+id/error_message"
+    android:layout_alignParentTop="true"
+     />
+<Button
+	android:layout_width="fill_parent"
+    android:layout_height="40dip"
+    android:id="@+id/error_button"
+    android:layout_alignParentBottom="true"
+    android:text = "Quit"
+/>
+
+</RelativeLayout>   
+
+
