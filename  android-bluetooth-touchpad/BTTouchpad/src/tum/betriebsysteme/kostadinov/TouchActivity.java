@@ -20,6 +20,7 @@
 
 package tum.betriebsysteme.kostadinov;
 
+import java.util.ArrayList;
 import java.util.List;
 import tum.betriebsysteme.kostadinov.btframework.l2cap.SocketThread;
 import tum.betriebsysteme.kostadinov.btframework.report.HIDReport;
@@ -34,6 +35,7 @@ import tum.betriebsysteme.kostadinov.ui.options.Paintpad;
 import tum.betriebsysteme.kostadinov.ui.options.Pointer;
 import tum.betriebsysteme.kostadinov.ui.options.PointerAbsolute;
 import tum.betriebsysteme.kostadinov.ui.options.Touchpad;
+import tum.betriebsysteme.kostadinov.ui.options.Voice;
 import tum.betriebsysteme.kostadinov.util.ActivityResource;
 import tum.betriebsysteme.kostadinov.util.CONSTANTS;
 import tum.betriebsysteme.kostadinov.util.DeviceDiscovery;
@@ -44,8 +46,10 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.MotionEvent;
+
 
 public class TouchActivity extends Activity implements 
 	SDPRegister.SDPStateListener, SocketThread.EventListener, 
@@ -116,7 +120,21 @@ public class TouchActivity extends Activity implements
     	
     	Log.v(TAG, "onActivityResult OK: " + (resultCode == Activity.RESULT_OK));
     	
-    	if(resultCode == Activity.RESULT_OK){
+    	if (requestCode == Voice.RECOGNITION_SUCCESS_CODE && resultCode == RESULT_OK) {
+            
+    		Log.v(TAG, "onActivityResult VOICE INPUT: ");
+    		
+    		ArrayList<String> matches = data.getStringArrayListExtra(
+    				RecognizerIntent.EXTRA_RESULTS);
+            
+    		if( currentOption != null && currentOption instanceof Voice){
+    			((Voice) currentOption).sendText(matches.get(0).toString());	
+    		}
+        }
+    	
+    	else if(resultCode == Activity.RESULT_OK){
+    		Log.v(TAG, "onActivityResult ROOT PERMISSIONS: ");
+    		
     		//Bluetooth has been enabled, go on with SDP
     		DialogController.showLoadingDialog();
     		sdpList.showConfigurationOptions();
@@ -298,6 +316,14 @@ public class TouchActivity extends Activity implements
 		case Option.OPTION_PAINTPAD_INDEX: {
 			
 			this.currentOption = new Paintpad(this);
+			this.currentOption.initOptionUI();
+			
+			break;
+		}
+		
+		case Option.OPTION_VOICE_INDEX: {
+			
+			this.currentOption = new Voice(this);
 			this.currentOption.initOptionUI();
 			
 			break;

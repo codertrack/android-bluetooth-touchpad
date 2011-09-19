@@ -26,11 +26,11 @@ public class CONSTANTS {
 	public static final int INTERRUPTION_CHANNEL_PORT 	= 0x13; 
 	
 	public static final String[] OPTIONS = {
-		 "KEYBOARD", "TOUCHPAD", "POINTER (R)", "POINTER (A)", "PAINTPAD"
+		 "KEYBOARD", "TOUCHPAD", "POINTER (R)", "POINTER (A)", "PAINTPAD", "VOICE"
 	};
 	
-	public static final String SDP_CONFIG_RELATIVE_OPTIONS = "012";
-	public static final String SDP_CONFIG_ABSOLUTE_OPTIONS = "034";
+	public static final String SDP_CONFIG_RELATIVE_OPTIONS = "0125";
+	public static final String SDP_CONFIG_ABSOLUTE_OPTIONS = "0345";
 	
 	public static final String BLUETOOTH_NOT_SUPPORTED_MESSAGE 		= "Your Device does not support Bluetooth.";
 	public static final String BLUETOOTH_NOT_ENABLED_BY_USER 		= "Bluetooth was not enabled by the user.";

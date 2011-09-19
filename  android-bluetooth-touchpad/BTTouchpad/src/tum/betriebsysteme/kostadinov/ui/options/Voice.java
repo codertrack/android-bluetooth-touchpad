@@ -20,31 +20,23 @@
 
 package tum.betriebsysteme.kostadinov.ui.options;
 
-import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
-import android.text.method.KeyListener;
-import android.util.Log;
-import android.view.KeyEvent;
+import android.speech.RecognizerIntent;
 import android.view.View;
-import android.view.View.OnKeyListener;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import tum.betriebsysteme.kostadinov.R;
 import tum.betriebsysteme.kostadinov.btframework.report.HIDReportKeyboard;
 import tum.betriebsysteme.kostadinov.ui.options.util.SharedFunctions;
 import tum.betriebsysteme.kostadinov.util.ActivityResource;
 import tum.betriebsysteme.kostadinov.util.State;
 
-public class Keyboard extends Option implements TextWatcher {
+public class Voice extends Option implements OnClickListener {
 
-	public Keyboard(OptionListener optionListener) {
+	public static final int RECOGNITION_SUCCESS_CODE = 0x112;
+	
+	public Voice(OptionListener optionListener) {
 		super(optionListener);
 	}
 
@@ -52,55 +44,58 @@ public class Keyboard extends Option implements TextWatcher {
 	public void initOptionUI() {
 		
 		State.setUIState(State.UI_STATE_OPTION);
-	
+		
 		ActivityResource.setOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		
 		ViewGroup main = (ViewGroup) ActivityResource.get().findViewById(R.id.main);
-		View keyboardView = ActivityResource.inflate(R.layout.keyboard);
-		EditText keyboardInput = (EditText) keyboardView.findViewById(R.id.keyboard_input);
-		keyboardInput.addTextChangedListener(this);
+		View voiceView = ActivityResource.inflate(R.layout.voice);
+		voiceView.findViewById(R.id.voice_button).setOnClickListener(this);
 		main.removeAllViews();
-		main.addView(keyboardView);
+		main.addView(voiceView);
 		main.invalidate();
 		
 		optionActive = true;   
 		  
+		
 	}
 
 	@Override
 	public void destroyOptionUI() {
 		optionActive = false;
-	}
-
-	@Override
-	public void afterTextChanged(Editable s) {
-		//do nothing
-	}
-
-	@Override
-	public void beforeTextChanged(CharSequence s, int start, int count,
-			int after) {
-		//do nothing
-	}
-
-	@Override
-	public void onTextChanged(CharSequence sequence, int start, int before, int count) {
-	
-		if(!optionActive) return;
 		
-		if(before > 0) {
-			HIDReportKeyboard report = new HIDReportKeyboard();
-			report.setSingleKeycode(0x2A);
+	}
+
+	@Override
+	public void onClick(View v) {
+		
+		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+	    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+	                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+	    intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speech to text");
+	    ActivityResource.get().startActivityForResult(intent, RECOGNITION_SUCCESS_CODE);	
+		
+	}
+
+	public void sendText(String message) {
+		
+		//Set the proper end of sentance.
+		message += ". "; 
+		
+		for(int i=0; i<message.length(); i++){
+			
+			int sign = message.charAt(i);
+			HIDReportKeyboard report = SharedFunctions.getReportFromKey(sign);
+			
+			if(i == 0){
+				report.setModifier(HIDReportKeyboard.LEFT_SHIFT_MODIFIER);
+			}
+			
 			this.optionListener.onOptionEvent(report);
-			this.optionListener.onOptionEvent(new HIDReportKeyboard());
-			return;
+			
 		}
 		
-		int sign = sequence.charAt(start);
-
-		this.optionListener.onOptionEvent(SharedFunctions.getReportFromKey(sign));
 		this.optionListener.onOptionEvent(new HIDReportKeyboard());
-		
+	
 	}
 
 	
