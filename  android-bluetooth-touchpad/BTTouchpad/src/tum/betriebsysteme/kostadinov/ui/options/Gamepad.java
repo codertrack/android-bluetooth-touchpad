@@ -44,7 +44,7 @@ public class Gamepad extends Option implements SensorEventListener {
 		LEFT,RIGHT,NEUTRAL
 	}
 	
-	private View ulButton;
+	private View[] button;
 	private View urButton;
 	private View blButton;
 	private View brButton;
@@ -72,10 +72,12 @@ public class Gamepad extends Option implements SensorEventListener {
 		
 		View gamepadView = ActivityResource.inflate(R.layout.gamepad);
 		
-		ulButton = gamepadView.findViewById(R.id.gamepad_upper_left);
-		urButton = gamepadView.findViewById(R.id.gamepad_upper_right);
-		blButton = gamepadView.findViewById(R.id.gamepad_bottom_left);
-		brButton = gamepadView.findViewById(R.id.gamepad_bottom_right);
+		button = new View[4];
+		
+		button[0] = gamepadView.findViewById(R.id.gamepad_upper_left);
+		button[1] = gamepadView.findViewById(R.id.gamepad_upper_right);
+		button[2] = gamepadView.findViewById(R.id.gamepad_bottom_left);
+		button[3] = gamepadView.findViewById(R.id.gamepad_bottom_right);
 		
 		sensorManager = (SensorManager) ActivityResource.get().getSystemService(Context.SENSOR_SERVICE);
         
@@ -172,16 +174,18 @@ public class Gamepad extends Option implements SensorEventListener {
 				int x = (int) event.getX(i);
 				int y = (int) event.getY(i);
 				
+				boolean[] pressedButtons = pressedButtons(x,y,true);
+				
 				report.setKeycodes(
 						
 						// Up arrow
-						(pointInViewRegion(ulButton,x,y)) ? 0x52 : report.getKeycode(0),
+						(pressedButtons[0]) ? 0x52 : report.getKeycode(0),
 						//0x11 -> left control
-						(pointInViewRegion(urButton,x,y)) ? 0xE0 : report.getKeycode(1),
+						(pressedButtons[1]) ? 0xE0 : report.getKeycode(1),
 						// Down arrow
-						(pointInViewRegion(blButton,x,y)) ? 0x51 : report.getKeycode(2),
+						(pressedButtons[2]) ? 0x51 : report.getKeycode(2),
 						//0x2c -> spacebar
-						(pointInViewRegion(brButton,x,y)) ? 0x2C : report.getKeycode(3),
+						(pressedButtons[3]) ? 0x2C : report.getKeycode(3),
 						     
 						report.getKeycode(4),
 						report.getKeycode(5)
@@ -191,31 +195,33 @@ public class Gamepad extends Option implements SensorEventListener {
 				this.optionListener.onOptionEvent(report);
 				
 			}
-							
+ 							
 		}else if(
-				
-				event.getAction() == MotionEvent.ACTION_UP ||
-				event.getAction() == MotionEvent.ACTION_POINTER_1_UP ||
+ 				
+ 				event.getAction() == MotionEvent.ACTION_UP ||
+ 				event.getAction() == MotionEvent.ACTION_POINTER_1_UP ||
 				event.getAction() == MotionEvent.ACTION_POINTER_2_UP ||
-				event.getAction() == MotionEvent.ACTION_POINTER_3_UP
+	  			event.getAction() == MotionEvent.ACTION_POINTER_3_UP
 				
 				){
 					
 		for(int i=0; i < event.getPointerCount(); i++){
-				
+	 			
 				int x = (int) event.getX(i);
 				int y = (int) event.getY(i);
+				
+				boolean[] pressedButtons = pressedButtons(x,y,false);
 				
 				report.setKeycodes(
 						
 						// Up arrow
-						(pointInViewRegion(ulButton,x,y)) ? HIDReportKeyboard.EMPTY_KEYCODE : report.getKeycode(0),
+						(pressedButtons[0]) ? HIDReportKeyboard.EMPTY_KEYCODE : report.getKeycode(0),
 						//0x11 -> left control
-						(pointInViewRegion(urButton,x,y)) ? HIDReportKeyboard.EMPTY_KEYCODE : report.getKeycode(1),
+						(pressedButtons[1]) ? HIDReportKeyboard.EMPTY_KEYCODE : report.getKeycode(1),
 						// Down arrow
-						(pointInViewRegion(blButton,x,y)) ? HIDReportKeyboard.EMPTY_KEYCODE : report.getKeycode(2),
+						(pressedButtons[2]) ? HIDReportKeyboard.EMPTY_KEYCODE : report.getKeycode(2),
 						//0x20 -> spacebar
-						(pointInViewRegion(brButton,x,y)) ? HIDReportKeyboard.EMPTY_KEYCODE : report.getKeycode(3),
+						(pressedButtons[3]) ? HIDReportKeyboard.EMPTY_KEYCODE : report.getKeycode(3),
 						
 						report.getKeycode(4),
 						report.getKeycode(5)
@@ -229,16 +235,26 @@ public class Gamepad extends Option implements SensorEventListener {
 
 	}
 	
-	public boolean pointInViewRegion(View view, int x, int y){
+	public boolean[] pressedButtons(int x, int y, boolean checkDown){
 
-		return (	
-				
-			x > view.getLeft() &&
-			x < view.getRight() &&
-			y > view.getTop() &&
-			y < view.getBottom()
+		boolean buttonsTouched[] = new boolean[]{
+				false, false, false, false
+		};
+		
+		for(int i = 0; i<4;i++){
 			
-		);
+			boolean isIn = (x > button[i].getLeft() &&
+							x < button[i].getRight() &&
+							y > button[i].getTop() &&
+							y < button[i].getBottom());
+			
+			buttonsTouched[i] = isIn;
+			
+			if(isIn) button[i].setPressed(checkDown);
+			
+		}
+		
+		return buttonsTouched;
 		
 	}
 

@@ -8,39 +8,43 @@
 	android:paddingBottom="40dip"
 >
 
-<Button
+<ImageView
 	android:layout_width="100dip"
 	android:layout_height="100dip"
 	android:id="@+id/gamepad_upper_left"
 	android:text="UL"
 	android:layout_alignParentTop="true"
 	android:layout_alignParentLeft="true"
+	android:src="@drawable/up"
 />
-<Button
+<ImageView
 	android:layout_width="100dip"
 	android:layout_height="100dip"
 	android:id="@+id/gamepad_bottom_left"
 	android:text="BL"
 	android:layout_alignParentBottom="true"
 	android:layout_alignParentLeft="true"
+	android:src="@drawable/down"
 />
 
 
-<Button
+<ImageView
 	android:layout_width="100dip"
 	android:layout_height="100dip"
 	android:id="@+id/gamepad_upper_right"
 	android:text="UR"
 	android:layout_alignParentTop="true"
 	android:layout_alignParentRight="true"
+	android:src="@drawable/x"
 />
-<Button
+<ImageView
 	android:layout_width="100dip"
 	android:layout_height="100dip"
 	android:id="@+id/gamepad_bottom_right"
 	android:text="BR"
 	android:layout_alignParentBottom="true"
 	android:layout_alignParentRight="true"
+	android:src="@drawable/cube"
 />
-
+  
 </RelativeLayout>

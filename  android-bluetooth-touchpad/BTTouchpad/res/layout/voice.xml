@@ -3,10 +3,12 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 >
-<Button
+<ImageView
 	android:layout_width="150dip"
 	android:layout_height="150dip"
 	android:id="@+id/voice_button"
-	android:layout_centerInParent="true"
+	android:layout_centerHorizontal="true"
+	android:paddingTop="200dip"
+	android:src="@drawable/sound"
 />
 </RelativeLayout>
