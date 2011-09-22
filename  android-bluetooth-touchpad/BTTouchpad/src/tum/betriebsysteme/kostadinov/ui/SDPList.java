@@ -55,7 +55,7 @@ public class SDPList implements OnClickListener {
 		
 		sdpView.findViewById(R.id.sdp_list_relative).setOnClickListener(this);
 		sdpView.findViewById(R.id.sdp_list_absolute).setOnClickListener(this);
-		sdpView.findViewById(R.id.sdp_list_help).setOnClickListener(this);
+		//sdpView.findViewById(R.id.sdp_list_help).setOnClickListener(this);
 
 		mainView.removeAllViews();
 		mainView.addView(sdpView);
@@ -81,10 +81,10 @@ public class SDPList implements OnClickListener {
 			break;
 		}
 		
-		case R.id.sdp_list_help : {
-			//TODO: Implement help button
-			break;
-		}
+//		case R.id.sdp_list_help : {
+//			//TODO: Implement help button
+//			break;
+//		}
 		
 		}
 		

@@ -29,27 +29,9 @@
  	android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:id="@+id/device_list"
-    android:layout_above="@+id/device_list_help"
     android:layout_below="@+id/device_list_label"
 	/>
 </ScrollView>
-<Button	
-	android:layout_width="fill_parent"
-	android:layout_height="70dip"
-	android:text="HELP"
-	android:id="@+id/device_list_help"
-	android:layout_above="@+id/device_list_refresh"
-	android:textSize="25dip"
-/>
-<Button	
-	android:layout_width="fill_parent"
-	android:layout_height="70dip"
-	android:text="REFRESH LIST"
-	android:id="@+id/device_list_refresh"
-	android:layout_alignParentBottom="true"
-	android:textSize="25dip"
-/>   
-
 </RelativeLayout>   
 
 

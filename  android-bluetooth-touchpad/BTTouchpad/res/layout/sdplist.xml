@@ -89,13 +89,4 @@
 </RelativeLayout>   
 </RelativeLayout>
 </LinearLayout>
-<Button	
-	android:layout_width="fill_parent"
-	android:layout_height="80dip"
-	android:text="HELP"
-	android:id="@+id/sdp_list_help"
-	android:textSize="25dip"
-	android:layout_alignParentBottom="true"
-	android:layout_margin="5dip"
-/>
 </RelativeLayout>
