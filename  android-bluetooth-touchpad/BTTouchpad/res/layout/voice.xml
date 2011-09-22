@@ -8,7 +8,7 @@
 	android:layout_height="150dip"
 	android:id="@+id/voice_button"
 	android:layout_centerHorizontal="true"
-	android:paddingTop="200dip"
+	android:layout_marginTop="50dip"
 	android:src="@drawable/sound"
 />
 </RelativeLayout>
