@@ -137,7 +137,6 @@ public class TouchActivity extends Activity implements
     		Log.v(TAG, "onActivityResult ROOT PERMISSIONS: ");
     		
     		//Bluetooth has been enabled, go on with SDP
-    		DialogController.showLoadingDialog();
     		sdpList.showConfigurationOptions();
     		
     	}else{
@@ -164,6 +163,8 @@ public class TouchActivity extends Activity implements
 						deviceDiscovery.discoverDevices();
 					
 					} else {
+						
+						DialogController.hideLoadingDialog();
 						
 						DialogController.showFatalErrorDialog(
 								CONSTANTS.SDP_FAILED_ERROR_MESSAGE + state);
@@ -454,29 +455,6 @@ public class TouchActivity extends Activity implements
 		return true;
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see android.view.View.OnTouchListener#onTouch(android.view.View, android.view.MotionEvent)
-	 * 
-	 *   View v = getCurrentFocus();
-	    boolean ret = super.dispatchTouchEvent(event);
-
-	    if (v instanceof EditText) {
-	        View w = getCurrentFocus();
-	        int scrcoords[] = new int[2];
-	        w.getLocationOnScreen(scrcoords);
-	        float x = event.getRawX() + w.getLeft() - scrcoords[0];
-	        float y = event.getRawY() + w.getTop() - scrcoords[1];
-
-	        Log.d("Activity", "Touch event "+event.getRawX()+","+event.getRawY()+" "+x+","+y+" rect "+w.getLeft()+","+w.getTop()+","+w.getRight()+","+w.getBottom()+" coords "+scrcoords[0]+","+scrcoords[1]);
-	        if (event.getAction() == MotionEvent.ACTION_UP && (x < w.getLeft() || x >= w.getRight() || y < w.getTop() || y > w.getBottom()) ) { 
-
-	        	ActivityResource.hideKeyboard();
-	        }
-	    }
-	return ret;
-	
-	 */
 	
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent event) {

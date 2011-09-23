@@ -6,18 +6,19 @@
 
 <TextView
  	android:layout_width="fill_parent"
-    android:layout_height="150dip"
+    android:layout_height="fill_parent"
     android:id="@+id/error_message"
     android:layout_alignParentTop="true"
+    android:textSize="20dip"
      />
 <Button
 	android:layout_width="fill_parent"
-    android:layout_height="40dip"
+    android:layout_height="80dip"
     android:id="@+id/error_button"
     android:layout_alignParentBottom="true"
-    android:text = "Quit"
+	android:textSize="30dip"
+    android:text = "OK"
 />
-
 </RelativeLayout>   
 
 

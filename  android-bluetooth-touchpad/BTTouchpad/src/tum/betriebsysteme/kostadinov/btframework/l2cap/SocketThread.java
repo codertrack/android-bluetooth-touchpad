@@ -143,7 +143,10 @@ public class SocketThread extends Thread {
     public void write(byte[] bytes) {
         try {
             outputStream.write(bytes);
+            
         } catch (IOException e) {
+        	eventListener.onSocketConnectionFailed(port);
+        } catch (Exception e){
         	eventListener.onSocketConnectionFailed(port);
         }
     }

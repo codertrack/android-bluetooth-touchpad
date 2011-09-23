@@ -49,6 +49,7 @@ public class ActivityResource {
 	private static Activity activityResource;
 	private static Handler uiHandler;
 	
+	
 
 	//execute set in OnCreate
 	public static void set(Activity activityResource) {

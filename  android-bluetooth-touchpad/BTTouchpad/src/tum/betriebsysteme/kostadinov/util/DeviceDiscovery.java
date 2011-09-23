@@ -29,8 +29,11 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public class DeviceDiscovery {
+	
+	public static final String TAG = "DEVICE_DISCOVERY";
 	
 	public static interface DiscoveryListener {
 
@@ -54,6 +57,8 @@ public class DeviceDiscovery {
 
 	
 	public void enableBluetooth(){
+		
+		Log.v(TAG, "enableBluetooth()");
 		
 		BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		

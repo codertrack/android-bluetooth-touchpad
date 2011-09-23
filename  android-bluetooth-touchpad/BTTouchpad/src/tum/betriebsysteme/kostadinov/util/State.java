@@ -31,12 +31,14 @@ public class State {
 	public static final int UI_STATE_DEVICE_LIST = 1;
 	public static final int UI_STATE_OPTION_LIST = 2;
 	public static final int UI_STATE_OPTION = 3;
+	public static final int INITIAL = -1;
+	
 	
 	
 	
 	private static int orientation;
 	
-	private static int uiState;
+	private static int uiState = State.INITIAL;
 	
 	private static int sdpConfig;
 	

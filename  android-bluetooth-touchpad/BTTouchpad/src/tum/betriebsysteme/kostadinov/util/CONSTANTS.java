@@ -32,9 +32,9 @@ public class CONSTANTS {
 	public static final String SDP_CONFIG_RELATIVE_OPTIONS = "01256";
 	public static final String SDP_CONFIG_ABSOLUTE_OPTIONS = "03456";
 	
-	public static final String BLUETOOTH_NOT_SUPPORTED_MESSAGE 		= "Your Device does not support Bluetooth.";
-	public static final String BLUETOOTH_NOT_ENABLED_BY_USER 		= "Bluetooth was not enabled by the user.";
-	public static final String SDP_FAILED_ERROR_MESSAGE 			= "Failed to register new record in service discovery protocol. Error Code: ";
-	public static final String SOCKET_CONNECTION_ERROR_MESSAGE 		= "Failed to connect to remote device."; 
+	public static final String BLUETOOTH_NOT_SUPPORTED_MESSAGE 		= "Your Device does not support Bluetooth.\n\nPlease quit the application with the back button.";
+	public static final String BLUETOOTH_NOT_ENABLED_BY_USER 		= "Bluetooth was not enabled.\n\nApplication will quit, so you could enable Bluetooth from the phone's menu.";
+	public static final String SDP_FAILED_ERROR_MESSAGE 			= "Failed to register new service record in SDP.\n\nAre you root?\n\nYour phone might not allow registration of new services.\n\nError Code: ";
+	public static final String SOCKET_CONNECTION_ERROR_MESSAGE 		= "Failed to connect to remote device.\n\nIs the device running and in range?\n\nPlease, check if the device has Bluetooth enabled and allows the connection."; 
 } 
   

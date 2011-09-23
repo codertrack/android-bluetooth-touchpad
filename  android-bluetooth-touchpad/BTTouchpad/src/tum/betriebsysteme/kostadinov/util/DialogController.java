@@ -30,7 +30,7 @@ import android.widget.TextView;
 public class DialogController {
 	
 	private static final String LOADING_MESSAGE = "Loading...";
-	private static final String FATAL_ERROR_TITLE = "Error";
+	private static final String FATAL_ERROR_TITLE = "ERROR";
 	
 	private static final long MIN_LOADING_DURATION = 1500; // 1.5 Sceonds
 	
@@ -52,8 +52,23 @@ public class DialogController {
 
 			@Override
 			public void onClick(View v) {
-				ActivityResource.get().finish();
 				DialogController.hideAlertDialog();
+				
+				if(State.getUIState() == State.UI_STATE_OPTION){
+					ActivityResource.get().onBackPressed();
+					ActivityResource.get().onBackPressed();
+				}else if(State.getUIState() == State.UI_STATE_OPTION_LIST){
+					ActivityResource.get().onBackPressed();
+				}else if(State.getUIState() == State.UI_STATE_DEVICE_LIST){
+					//do nothing, user can choose different device
+				}else if(State.getUIState() == State.UI_STATE_SDP_CONFIGURATION){
+					//do nothing, user can try again.
+				}else if(State.getUIState() == State.INITIAL){
+					//User didn't activate Bluetooth.
+					//Quit app, so he can activate it from the phone's menu.
+					ActivityResource.get().finish();
+				}
+				
 			}
 			
 		});
@@ -64,7 +79,8 @@ public class DialogController {
 	
 	public static void showAlertDialog(View content, String title, boolean cancelable){
 		
-		if(progressDialog == null || !progressDialog.isShowing()){
+		if((progressDialog == null || !progressDialog.isShowing()) &&
+				(alertDialog == null || !alertDialog.isShowing()) ){
 			
 			AlertDialog.Builder builder = new AlertDialog.Builder(ActivityResource.get());
 			builder.setView(content);
