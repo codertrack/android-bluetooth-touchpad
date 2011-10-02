@@ -89,7 +89,7 @@ public class Paintpad extends Option implements OnGestureListener, OnTouchListen
 			updateMovementBytes(event);
 			
 			HIDReportMouseAbsolute mouseReport = new HIDReportMouseAbsolute();
-			mouseReport.setMovement(
+			mouseReport.setPosition(
 					(byte) movementXFirstByte,
 					(byte) movementXSecondByte,
 					(byte) movementYFirstByte,
@@ -130,7 +130,7 @@ public class Paintpad extends Option implements OnGestureListener, OnTouchListen
 		if(State.isTrackBallDown())
 			mouseReport.setButton(HIDReportMouseRelative.MOUSE_LEFT_BUTTON);
 		
-		mouseReport.setMovement(
+		mouseReport.setPosition(
 				(byte) movementXFirstByte,
 				(byte) movementXSecondByte,
 				(byte) movementYFirstByte,

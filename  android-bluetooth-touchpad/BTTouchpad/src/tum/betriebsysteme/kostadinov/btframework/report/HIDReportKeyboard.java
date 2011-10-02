@@ -20,13 +20,28 @@
 
 package tum.betriebsysteme.kostadinov.btframework.report;
 
-import android.util.Log;
-
+/**
+ * Data report pattern for keyboard event. Contains up to 6 key presses.
+ * @author Nikolay Kostadinov
+ *
+ */
 public class HIDReportKeyboard extends HIDReport {
 	
-	public static final String TAG = "KEYBOARD_REPORT";
+
+	/**
+	 * Modifier for left control button. 
+	 */
+	public static final int LEFT_CONTROL_MODIFIER = 0x01;
 	
+	/**
+	 * Modifier for left shift button. 
+	 */
 	public static final int LEFT_SHIFT_MODIFIER = 0x02;
+	
+	/**
+	 * Modifier for left alt button. 
+	 */
+	public static final int LEFT_ALT_MODIFIER = 0x04;
 	
 	private byte[] report = new byte[]{
 		
@@ -43,24 +58,49 @@ public class HIDReportKeyboard extends HIDReport {
 		
 	};
 	
+	/**
+	 * Can set modifiers as left or right control or shift buttons. 
+	 * @param modifier the value representing the modifier button id.
+	 */
 	public void setModifier(int modifier){
 		report[2] = (byte) modifier; 
 	}
-	
+	/**
+	 * The modifier encoded with the data pattern. Default is 0x00.
+	 * @return the modifier's code. 
+	 */
 	public int getModifier(){
 		return report[2];
 	}
 	
+	/**
+	 * Returns the key codes, already encoded in the data pattern.
+	 * @param index the index of the key code. Must be between 0 and 5.
+	 * @return the key code or 0xffff if index < 0 or index > 5
+	 */
 	public int getKeycode(int index){
 		if(index >= 0 && index < 6 ){
 			return report[index+4];
 		}else return 0xffff;
 	}
 	
+	/**
+	 * Set a single key code for a single key press. The default value in the pattern is EMPTY_KEYCODE.
+	 * @param keyCode the key code's integer value
+	 */
 	public void setSingleKeycode(int keyCode){
 		report[4] = (byte) keyCode;
 	}
 	
+	/**
+	 * Set multiple key codes for multiple presses at the same time. The default value in the pattern is EMPTY_KEYCODE.
+	 * @param keyCode_1  the key code's integer value
+	 * @param keyCode_2  the key code's integer value
+	 * @param keyCode_3  the key code's integer value
+	 * @param keyCode_4  the key code's integer value
+	 * @param keyCode_5  the key code's integer value
+	 * @param keyCode_6  the key code's integer value
+	 */
 	public void setKeycodes(
 							int keyCode_1,
 							int keyCode_2,

@@ -35,6 +35,6 @@ public class CONSTANTS {
 	public static final String BLUETOOTH_NOT_SUPPORTED_MESSAGE 		= "Your Device does not support Bluetooth.\n\nPlease quit the application with the back button.";
 	public static final String BLUETOOTH_NOT_ENABLED_BY_USER 		= "Bluetooth was not enabled.\n\nApplication will quit, so you could enable Bluetooth from the phone's menu.";
 	public static final String SDP_FAILED_ERROR_MESSAGE 			= "Failed to register new service record in SDP.\n\nAre you root?\n\nYour phone might not allow registration of new services.\n\nError Code: ";
-	public static final String SOCKET_CONNECTION_ERROR_MESSAGE 		= "Failed to connect to remote device.\n\nIs the device running and in range?\n\nPlease, check if the device has Bluetooth enabled and allows the connection."; 
+	public static final String SOCKET_CONNECTION_ERROR_MESSAGE 		= "Connection failure.\n\nIs the device running and in range?\n\nPlease, check if the device has Bluetooth enabled and allows the connection."; 
 } 
   

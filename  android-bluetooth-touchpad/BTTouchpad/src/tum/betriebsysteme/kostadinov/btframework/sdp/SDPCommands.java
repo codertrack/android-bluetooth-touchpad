@@ -42,7 +42,7 @@ package tum.betriebsysteme.kostadinov.btframework.sdp;
 		return "cd /data/data/" + applicationPackageName+ "/files/ "+"\n"; 
 	}
 	
-	/*package*/ static String changeModeToExecutable(String executableName){
+	/*package*/ static String changeModeToExecutable(String executableName){ 
 		return "chmod 777 ./"+executableName+"\n";
 	}
 	 

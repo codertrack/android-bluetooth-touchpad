@@ -19,11 +19,22 @@
  */
 
 package tum.betriebsysteme.kostadinov.btframework.report;
-
+/**
+ * All data report patterns are inheriting from this class.
+ * @author Nikolay Kostadinov
+ *
+ */
 public abstract class HIDReport {
-
+	
+	/**
+	 * The data representing empty key code. 
+	 */
 	public static final int EMPTY_KEYCODE = 0x00;
 	
+	/**
+	 * Returns the data contained in a report as byte array.  
+	 * @return
+	 */
 	public abstract byte[] getReportPayload();
 	
 }

@@ -6,7 +6,7 @@
 <TextView
 	android:layout_width="fill_parent"
 	android:layout_height="40dip"
-	android:text="Choose paired bluetooth device:"
+	android:text="Choose paired Bluetooth device:"
 	android:textSize="20dip"
 	android:textColor="#C7C0C0"
 	android:gravity="center"

@@ -20,8 +20,16 @@
 
 package tum.betriebsysteme.kostadinov.btframework.report;
 
+/**
+ * Data report pattern for event of pointer. 
+ * @author Nikolay Kostadinov
+ *
+ */
 public class HIDReportMouseAbsolute extends HIDReportMouse {
 	
+	/**
+	 * The max value for screen coordinate you could send. It is determined by the HIDDescriptor for pointer.
+	 */
 	public static final float MAX_VALUE_COORDINATE = 1023.0f;
 
 	
@@ -41,7 +49,14 @@ public class HIDReportMouseAbsolute extends HIDReportMouse {
 			report[2] = (byte) button;  
 		}
 		
-		public void setMovement(byte x_1, byte x_2, byte y_1, byte y_2){
+		/**
+		 * Set the exact position of the mouse cursor. 
+		 * @param x_1 Coordinates on the x-axis.
+		 * @param x_2 Plus x_2*0xff to the coordinates on the x-axis. 
+		 * @param y_1 Coordinates on the y-axis.
+		 * @param y_2 Plus y_2*0xff to the coordinates on the y-axis. 
+		 */
+		public void setPosition(byte x_1, byte x_2, byte y_1, byte y_2){
 			report[3] =  x_1;
 			report[4] =  x_2;
 			report[5] =  y_1;

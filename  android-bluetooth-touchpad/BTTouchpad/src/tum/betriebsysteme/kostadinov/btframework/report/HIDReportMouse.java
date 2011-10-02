@@ -20,11 +20,26 @@
 
 package tum.betriebsysteme.kostadinov.btframework.report;
 
+/**
+ * Both data reports of regular mouse and a pointer are implementing this pattern.
+ * @author Nikolay Kostadinov
+ *
+ */
 public abstract class HIDReportMouse extends HIDReport {
-
-	public static final int MOUSE_LEFT_BUTTON = 0x01;
-	public static final int MOUSE_RIGHT_BUTTON = 0x02;
-	public static final int MOUSE_NON_BUTTON = 0x00;
 	
+	/**
+	 * Key code for the mouse left button.
+	 */
+	public static final int MOUSE_LEFT_BUTTON = 0x01;
+	
+	/**
+	 * Key code for the mouse right button
+	 */
+	public static final int MOUSE_RIGHT_BUTTON = 0x02;
+	
+	/**
+	 * Set the button, which is pressed.
+	 * @param button Either MOUSE_LEFT_BUTTON or MOUSE_RIGHT_BUTTON. The default value in the pattern is EMPTY_KEYCODE.
+	 */
 	public abstract void setButton(int button);
 }

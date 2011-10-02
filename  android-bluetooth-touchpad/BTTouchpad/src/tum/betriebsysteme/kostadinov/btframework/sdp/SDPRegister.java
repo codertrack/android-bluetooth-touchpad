@@ -27,62 +27,136 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+
+/**
+ * The SDP component is responsible for deploying the compiled executable and
+ * running it from the console. There only two functions supported - for adding
+ * the service record to the registry of the SDP server (registerHID) and
+ * deleting the same record from the registry. (unregisterHID) 
+ * 
+ * @author Nikolay Kostadinov
+ */
 public class SDPRegister {
 	
+	/**
+	 * Pass to the register function in order to register a service for mouse and keyboard. 
+	 */
 	public static final int SDP_CONFIG_MOUSE_RELATIVE = 0;
+	
+	/**
+	 * Pass to the register function in order to register a service for pointer and mouse.
+	 */
 	public static final int SDP_CONFIG_MOUSE_ABSOLUTE = 1;
 	
+	/**
+	 * Listener will return a code describing whether 
+	 * the register or unregister asynchronous call succeeded. 
+	 * @author Nikolay Kostadinov
+	 */
 	public static interface SDPStateListener {
 		
-		public void onRegisterComplete(int state);
+		/**
+		 * Called when the register operation is finished.
+		 * @param code describes either success or failure.
+		 */
+		public void onRegisterComplete(int code);
 		
+		/**
+		 * Called when the unregister operation is finished.
+		 * @param code describes either success or failure.
+		 */
 		public void onUnregisterComplete(int state);
 		
 	}
 	
-	//< State Constants
-	public static final int SDP_REGISTRATION_SUCCESS = 0;
+	/**
+	 * Code for registration success, the service record is added in the SDP server's registry.
+	 */
+	public static final int CODE_SDP_REGISTRATION_SUCCESS = 0;
 	
-	public static final int SDP_UNREGISTRATION_SUCCESS = 1;
+	/**
+	 * Code for unregistration success, the service record is removed from the SDP server's registry.
+	 */
+	public static final int CODE_SDP_UNREGISTRATION_SUCCESS = 1;
 	
-	public static final int EXECUTABLE_INVALID_COMMAND_PARAMS_ENTERED = 11;
+	/**
+	 * Error code, invalid commands or parameters are passed to the executable when running.
+	 */
+	public static final int CODE_EXECUTABLE_INVALID_COMMAND_PARAMS_ENTERED = 11;
 	
-	public static final int CONNECTION_TO_SDP_FAILED = 12;
+	/**
+	 * Error code, connection to the local SDP server could not be established. Probably,
+	 * the phone has modified Bluetooth stack. (Usually the case with HTC)
+	 */
+	public static final int CODE_CONNECTION_TO_SDP_FAILED = 12;
 	
-	public static final int SDP_REGISTRATION_FAILED = 13;
+	/**
+	 * Error code, the service record could not be added in the SDP server's registry.
+	 */
+	public static final int CODE_SDP_REGISTRATION_FAILED = 13;
 	
-	public static final int SDP_RECORD_REQUEST_FAILED = 14;
+	/**
+	 * Error code, the service record is not in the SDP server.
+	 */
+	public static final int CODE_SDP_RECORD_REQUEST_FAILED = 14;
 	
-	public static final int SDP_UNREGISTER_FAILED = 15;
+	/**
+	 * Error code, the service record could not be deleted from the SDP server's registry.
+	 */
+	public static final int CODE_SDP_UNREGISTER_FAILED = 15;
 	
-	public static final int EXECUTALBE_DEPLOING_FAILED = 31;
+	/**
+	 * Error code, deploying the executable to the phone's internal memory failed.  
+	 */
+	public static final int CODE_EXECUTALBE_DEPLOING_FAILED = 31;
 	
-	public static final int OS_COMMAND_ERROR = 32;
+	/**
+	 * Error code, the commands passed to the console returned an error.  
+	 */
+	public static final int CODE_OS_COMMAND_ERROR = 32;
 	
+	/**
+	 * Check if a state is success or error. 
+	 * @param state pass a state to check 
+	 * @return true if the code is for success and false if it is error.
+	 */
 	public static boolean isSuccess(int state){
 		return (state<10) ? true : false;
 	}
-	
-	// State Constants>
 	
 		
 	private static final String TAG = "SDP_SERVICE_REGISTER";
 	
 	private SDPStateListener sdpStateListener;
-	private Activity activityInstance;
+	private Context context;
 	
 	private boolean registerSuccess = false;
 	
-	public SDPRegister(Activity activityInstance, SDPStateListener sdpStateListener){
+	/**
+	 * Instantiating  the SDP component. 
+	 * 
+	 * @param context An instance of the application context. 
+	 * @param sdpStateListener The state listener will report for results after register 
+	 * and unregister asynchronous calls.
+	 */
+	public SDPRegister(Context context, SDPStateListener sdpStateListener){
 		this.sdpStateListener = sdpStateListener;
-		this.activityInstance = activityInstance;
+		this.context = context;
 	}
 	
+
+	/**
+	 * Attempts to register the new service record.
+	 * Call is asynchronous and runs in a separate Thread. 
+	 * Result will be sent by the SDPStateListener.
+	 * 
+	 * @param recordType the type of record to add. 
+	 * Either SDP_CONFIG_MOUSE_RELATIVE for mouse + keyboard 
+	 * or SDP_CONFIG_MOUSE_ABSOLUTE for pointer + keyboard. 
+	 */
 	public void registerHID(final int recordType){
 
 		(new Thread(){
@@ -95,8 +169,8 @@ public class SDPRegister {
 				
 				try{
 				
-				inputStream = activityInstance.getAssets().open(SDPCommands.EXECUTABLE_FILE_NAME);
-				fileOutputStream = activityInstance.openFileOutput(SDPCommands.EXECUTABLE_FILE_NAME, Context.MODE_PRIVATE);
+				inputStream = context.getAssets().open(SDPCommands.EXECUTABLE_FILE_NAME);
+				fileOutputStream = context.openFileOutput(SDPCommands.EXECUTABLE_FILE_NAME, Context.MODE_PRIVATE);
 				
 				byte[] buffer = new byte[4096];
 	        	int read;
@@ -110,7 +184,7 @@ public class SDPRegister {
 				}catch(IOException e){
 					
 					e.printStackTrace();
-					sdpStateListener.onRegisterComplete(EXECUTALBE_DEPLOING_FAILED);
+					sdpStateListener.onRegisterComplete(CODE_EXECUTALBE_DEPLOING_FAILED);
 					return;
 					
 				}
@@ -122,7 +196,7 @@ public class SDPRegister {
         			Process process = Runtime.getRuntime().exec(SDPCommands.COMMAND_EXEC_SU);
         			DataOutputStream osOut = new DataOutputStream(process.getOutputStream());
         			
-        			osOut.writeBytes(SDPCommands.navigateToExecutableFolder(activityInstance.getPackageName()));
+        			osOut.writeBytes(SDPCommands.navigateToExecutableFolder(context.getPackageName()));
         			osOut.flush(); 
         			
         			osOut.writeBytes(SDPCommands.changeModeToExecutable(SDPCommands.EXECUTABLE_FILE_NAME));
@@ -157,7 +231,7 @@ public class SDPRegister {
         			
         			Log.v(TAG, "Exit value: " + exitValue);
         			
-        			registerSuccess = (exitValue == SDP_REGISTRATION_SUCCESS);
+        			registerSuccess = (exitValue == CODE_SDP_REGISTRATION_SUCCESS);
         			
         			sdpStateListener.onRegisterComplete(exitValue);
         			
@@ -166,13 +240,13 @@ public class SDPRegister {
         			
         		} catch (IOException e) {
     				e.printStackTrace();
-    				sdpStateListener.onRegisterComplete(OS_COMMAND_ERROR);
+    				sdpStateListener.onRegisterComplete(CODE_OS_COMMAND_ERROR);
     				return;
     				
     				
     			} catch (InterruptedException e) {
     				e.printStackTrace();
-    				sdpStateListener.onRegisterComplete(OS_COMMAND_ERROR);
+    				sdpStateListener.onRegisterComplete(CODE_OS_COMMAND_ERROR);
     				return;
     			} 
 				
@@ -183,6 +257,12 @@ public class SDPRegister {
 
 	} 
 	
+	/**
+	 * Attempts to delete the service record, which was previously registered.
+	 * Call is asynchronous and runs in a separate Thread. Result will be
+	 * delivered by the SDPStateListener. Will do nothing if the registerHID call
+	 * was not successful.
+	 */
 	public void unregisterHID(){
 		
 		if(!registerSuccess) return;
@@ -197,7 +277,7 @@ public class SDPRegister {
         			Process process = Runtime.getRuntime().exec(SDPCommands.COMMAND_EXEC_SU);
         			DataOutputStream osOut = new DataOutputStream(process.getOutputStream());
         			
-        			osOut.writeBytes(SDPCommands.navigateToExecutableFolder(activityInstance.getPackageName()));
+        			osOut.writeBytes(SDPCommands.navigateToExecutableFolder(context.getPackageName()));
         			osOut.flush(); 
         			osOut.writeBytes(SDPCommands.runExecutable(SDPCommands.EXECUTABLE_FILE_NAME, SDPCommands.COMMAND_VALUE_UNREGISTER, null));
         			osOut.flush();
@@ -229,13 +309,13 @@ public class SDPRegister {
          			
         		} catch (IOException e) {
     				e.printStackTrace();
-    				sdpStateListener.onUnregisterComplete(OS_COMMAND_ERROR);
+    				sdpStateListener.onUnregisterComplete(CODE_OS_COMMAND_ERROR);
     				return;
     				
     				
     			} catch (InterruptedException e) {
     				e.printStackTrace();
-    				sdpStateListener.onUnregisterComplete(OS_COMMAND_ERROR);
+    				sdpStateListener.onUnregisterComplete(CODE_OS_COMMAND_ERROR);
     				return;
     			} 
 				

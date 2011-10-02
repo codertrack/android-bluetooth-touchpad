@@ -80,7 +80,7 @@ public class PointerAbsolute extends Pointer {
 		movementXSecondByte = (((int) coordX) / 0xff);
 		
 		HIDReportMouseAbsolute mouseReport = new HIDReportMouseAbsolute();
-		mouseReport.setMovement(
+		mouseReport.setPosition(
 				(byte) movementXFirstByte,
 				(byte) movementXSecondByte,
 				(byte) movementYFirstByte,
@@ -102,7 +102,7 @@ public class PointerAbsolute extends Pointer {
 				
 		);
 		
-		mouseReport.setMovement(
+		mouseReport.setPosition(
 				(byte) movementXFirstByte,
 				(byte) movementXSecondByte,
 				(byte) movementYFirstByte,
@@ -110,7 +110,7 @@ public class PointerAbsolute extends Pointer {
 		
 		this.optionListener.onOptionEvent(mouseReport);
 		
-		mouseReport.setButton(HIDReportMouse.MOUSE_NON_BUTTON);
+		mouseReport.setButton(HIDReportMouse.EMPTY_KEYCODE);
 		this.optionListener.onOptionEvent(mouseReport);
 		
 		ActivityResource.vibrate(ActivityResource.VIB_VERY_SHORT);

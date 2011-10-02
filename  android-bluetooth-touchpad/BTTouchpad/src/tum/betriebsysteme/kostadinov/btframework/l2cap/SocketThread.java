@@ -26,19 +26,41 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
-
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.util.Log;
 
+/**
+ * Connects to Bluetooth device asynchronously, in a separate Thread. Use this component to establish the L2CAP connection to the remote device. 
+ * @author Nikolay Kostadinov
+ *
+ */
 public class SocketThread extends Thread {
- 
+	
+	/**
+	 * Notifies of events connected with the connection establishment on L2CAP level. 
+	 * @author freeman
+	 *
+	 */
 	public static interface EventListener {
-
+		
+		/**
+		 * Called if the connection fails. 
+		 * @param port the psm port of the socket, which failed.
+		 */
 		public void onSocketConnectionFailed(int port);
 
+		/**
+		 * Notifies if a message from the remote Bluetooth party is received.
+		 * @param port the psm port of the socket, delivering the message.
+		 * @param bytesRead the number of bytes read.
+		 * @param buffer byte array containing the message.
+		 */
 		public void onBytesRead(int port, int bytesRead, byte[] buffer);
-
+		
+		/**
+		 * Called if the connection succeeds. 
+		 * @param port the psm port of the socket, which was successfuly opened. 
+		 */
 		public void onSocketConnected(int port);
 
 	}
@@ -51,11 +73,22 @@ public class SocketThread extends Thread {
 	private int port;
 	
 	private boolean isListening = false;
-
+	
+	/**
+	 * 
+	 * @param eventListener the listener, which will notify of new events.
+	 */
     public SocketThread(EventListener eventListener) {
     	this.eventListener = eventListener;
     }
     
+    /**
+     * Asynchronously connect to the remote Bluetooth device.
+     * Will run on separate Thread and will safely free the resources if not successful.
+     * Wait for notification through the EventListener to find out if it is successful or not.
+     * @param device The Bluetooth device to connect to.
+     * @param port The psm port oh which the L2CAP channel is established.
+     */
     public void connect(BluetoothDevice device, int port){
     	
         try {
@@ -90,7 +123,7 @@ public class SocketThread extends Thread {
     }
     
     
-
+    @Override
     public void run() {
     	
     	try {
@@ -138,8 +171,12 @@ public class SocketThread extends Thread {
     }
 
     
-
-	/* Call this from the main Activity to send data to the remote device */
+    /**
+     * Call this method to send data to the remote device,
+     * once the connection is established. Call is synchronous.
+     * The Thread calling it will wait until all bytes
+     * are send. Use with caution in Android.
+     */
     public void write(byte[] bytes) {
         try {
             outputStream.write(bytes);
@@ -151,7 +188,9 @@ public class SocketThread extends Thread {
         }
     }
 
-    /* Call this from the main Activity to shutdown the connection */
+    /**
+     * Call this to safely close the connection to the Bluetooth device.
+     */
     public void cancel() {
         try {
         	isListening = false;

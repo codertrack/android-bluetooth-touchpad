@@ -60,7 +60,7 @@ public class TouchActivity extends Activity implements
 	private static final String TAG = "TOUCH_ACTIVITY";
 	
 	private SDPRegister sdpRegister;
-	private DeviceDiscovery deviceDiscovery;
+	private DeviceDiscovery deviceDiscovery; 
 	private DeviceList deviceList;
 	private Option currentOption;
 	private OptionList optionList;

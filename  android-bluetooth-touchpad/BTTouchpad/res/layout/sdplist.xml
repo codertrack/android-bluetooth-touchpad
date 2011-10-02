@@ -22,7 +22,7 @@
 	android:background="#C7C0C0"
 	android:layout_marginBottom="10dip"
 />
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
     android:layout_width="fill_parent"
     android:layout_height="105dip"
 	android:paddingBottom="5dip"
@@ -45,7 +45,6 @@
 <TextView
  	android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:id="@+id/option_name"
     android:gravity="center"
     android:textColor="#C7C0C0"
     android:textSize="25dip"
@@ -55,7 +54,7 @@
 </RelativeLayout>     
 </RelativeLayout>   
 </RelativeLayout>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout 
     android:layout_width="fill_parent"
     android:layout_height="105dip"
 	android:paddingBottom="5dip"
@@ -78,7 +77,6 @@
 <TextView
  	android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:id="@+id/option_name"
     android:gravity="center"
     android:textColor="#C7C0C0"
     android:textSize="25dip"

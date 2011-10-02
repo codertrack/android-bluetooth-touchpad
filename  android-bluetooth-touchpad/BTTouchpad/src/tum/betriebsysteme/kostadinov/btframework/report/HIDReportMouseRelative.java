@@ -20,10 +20,16 @@
 
 package tum.betriebsysteme.kostadinov.btframework.report;
 
+/**
+ * Data report pattern for event of regular mouse. 
+ * @author Nikolay Kostadinov
+ *
+ */
 public class HIDReportMouseRelative extends HIDReportMouse {
-	
+	/**
+	 * Maximal mouse movement on x-asix, y-axis and mouse wheel.
+	 */
 	public static final int MAX_MOUSE_MOVEMENT = 127;
-
 	
 	private byte[] report = new byte[]{
 			
@@ -32,7 +38,7 @@ public class HIDReportMouseRelative extends HIDReportMouse {
 			(byte) 0x00, //2 	Button
 			(byte) 0x00, //3 	Movement X
 	 		(byte) 0x00, //4 	Movement Y
-			(byte) 0x00,  // 5	Wheel
+			(byte) 0x00, //5	Wheel
 			  
 		};     
 		
@@ -41,16 +47,29 @@ public class HIDReportMouseRelative extends HIDReportMouse {
 			report[2] = (byte) button;  
 		} 
 		
+		/**
+		 * Movement of the mouse cursor. 
+		 * @param x movement on the x-axis.
+		 * @param y movement on the y-axis.
+		 */
 		public void setMovement(int x, int y){
 			report[3] = (byte) x;
 			report[4] = (byte) y;
 		}    
-		
+		/**
+		 * Movement of the mouse cursor. 
+		 * @param x movement on the x-axis.
+		 * @param y movement on the y-axis.
+		 */
 		public void setMovement(float x, float y){
 			report[3] = (byte) x;
 			report[4] = (byte) y; 
 		}
 		
+		/**
+		 * Movement of the scroll wheel.
+		 * @param wheel Value of the movement, between -127 and 127.
+		 */
 		public void setWheel(int wheel){
 			report[5] = (byte) wheel; 
 		} 
@@ -60,8 +79,6 @@ public class HIDReportMouseRelative extends HIDReportMouse {
 		public byte[] getReportPayload() {
 			return report;
 		}
- 
-	
 	
 	
 }

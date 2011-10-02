@@ -21,22 +21,19 @@
 
 package tum.betriebsysteme.kostadinov.btframework.l2cap;
 
-import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.ParcelUuid;
-import android.util.Log;
 
-public class SocketFactory  {
+/**
+ * 
+ * @author freeman
+ *
+ */
+class SocketFactory  {
 	
 	private SocketFactory(){}
 	
