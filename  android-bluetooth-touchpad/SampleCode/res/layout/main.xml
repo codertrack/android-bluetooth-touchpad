@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+<Button 
+	android:layout_width="fill_parent"
+    android:layout_height="100dip"
+    android:text="Add service record."
+    android:id="@+id/add_service_button"
+/>    
+<Button 
+	android:layout_width="fill_parent"
+    android:layout_height="100dip"
+    android:text="Connect to device"
+    android:id="@+id/connect_to_device_button"
+/>
+<Button 
+	android:layout_width="fill_parent"
+    android:layout_height="100dip"
+    android:text="Send message"
+    android:id="@+id/send_message_button"
+/>
+</LinearLayout>
