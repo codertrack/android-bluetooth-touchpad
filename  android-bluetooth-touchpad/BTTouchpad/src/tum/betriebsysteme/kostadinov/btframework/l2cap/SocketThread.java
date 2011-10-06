@@ -200,5 +200,13 @@ public class SocketThread extends Thread {
         } catch (IOException e) { }
     }
     
+    /**
+     * Check if the socket is connected.
+     * @return true if the socket is connected and false if not.
+     */
+	public boolean isConnected() {
+		return isListening;
+	}
+    
 }
 
