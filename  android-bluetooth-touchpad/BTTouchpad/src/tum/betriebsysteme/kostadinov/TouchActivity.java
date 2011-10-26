@@ -35,6 +35,7 @@ import tum.betriebsysteme.kostadinov.ui.options.Option;
 import tum.betriebsysteme.kostadinov.ui.options.Paintpad;
 import tum.betriebsysteme.kostadinov.ui.options.Pointer;
 import tum.betriebsysteme.kostadinov.ui.options.PointerAbsolute;
+import tum.betriebsysteme.kostadinov.ui.options.Prezi;
 import tum.betriebsysteme.kostadinov.ui.options.Touchpad;
 import tum.betriebsysteme.kostadinov.ui.options.Voice;
 import tum.betriebsysteme.kostadinov.util.ActivityResource;
@@ -334,6 +335,14 @@ public class TouchActivity extends Activity implements
 		case Option.OPTION_GAMEPAD_INDEX: {
 			
 			this.currentOption = new Gamepad(this);
+			this.currentOption.initOptionUI();
+			
+			break;
+		}
+		
+		case Option.OPTION_PREZI_INDEX: {
+			
+			this.currentOption = new Prezi(this);
 			this.currentOption.initOptionUI();
 			
 			break;

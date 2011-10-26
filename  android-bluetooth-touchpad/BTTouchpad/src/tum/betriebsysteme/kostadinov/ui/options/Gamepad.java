@@ -23,6 +23,8 @@ package tum.betriebsysteme.kostadinov.ui.options;
 import tum.betriebsysteme.kostadinov.R;
 import tum.betriebsysteme.kostadinov.btframework.report.HIDReportKeyboard;
 import tum.betriebsysteme.kostadinov.util.ActivityResource;
+import tum.betriebsysteme.kostadinov.util.SensorUtility;
+import tum.betriebsysteme.kostadinov.util.SensorUtility.SensorListener;
 import tum.betriebsysteme.kostadinov.util.State;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -38,7 +40,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class Gamepad extends Option implements SensorEventListener {
+public class Gamepad extends Option implements SensorListener {
 
 	public enum Direction{
 		LEFT,RIGHT,NEUTRAL
@@ -51,10 +53,11 @@ public class Gamepad extends Option implements SensorEventListener {
 	
 	private Direction direction = Direction.NEUTRAL;
 	
-	private static final String TAG = "GAMEPAD";
+	protected static final String TAG = "GAMEPAD";
 	
-	private static HIDReportKeyboard report;
-	private SensorManager sensorManager;
+	protected static HIDReportKeyboard report;
+	//private SensorManager sensorManager;
+	private SensorUtility sensorUtility;
 	
 	public Gamepad(OptionListener optionListener) {
 		super(optionListener);	
@@ -79,11 +82,14 @@ public class Gamepad extends Option implements SensorEventListener {
 		button[2] = gamepadView.findViewById(R.id.gamepad_bottom_left);
 		button[3] = gamepadView.findViewById(R.id.gamepad_bottom_right);
 		
-		sensorManager = (SensorManager) ActivityResource.get().getSystemService(Context.SENSOR_SERVICE);
-        
-        sensorManager.registerListener(this,
-		sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
-		SensorManager.SENSOR_DELAY_UI);
+//		sensorManager = (SensorManager) ActivityResource.get().getSystemService(Context.SENSOR_SERVICE);
+//        
+//      sensorManager.registerListener(this,
+//		sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
+//		SensorManager.SENSOR_DELAY_UI);
+		
+		sensorUtility = SensorUtility.createInstance();
+		sensorUtility.startListening(false, true, false, this);
 		
 		main.removeAllViews();
 		main.addView(gamepadView);
@@ -94,64 +100,64 @@ public class Gamepad extends Option implements SensorEventListener {
 
 	@Override
 	public void destroyOptionUI() {
-		sensorManager.unregisterListener(this);
-		sensorManager = null;
+		sensorUtility.cancel();
+		sensorUtility = null;
 		optionActive = false;
 	}
 
-	@Override
-	public void onAccuracyChanged(Sensor arg0, int arg1) {
-		
-	}
-
-	@Override
-	public void onSensorChanged(SensorEvent event) {
-
-		if(!this.optionActive) return;
-		
-		int value = (int) event.values[1];
-		
-		if(value<-8 && !this.direction.equals(Direction.RIGHT)){
-			this.direction = Direction.RIGHT;
-			
-			report.setKeycodes(
-					report.getKeycode(0),
-					report.getKeycode(1),
-					report.getKeycode(2),
-					report.getKeycode(3),
-					0x4F,
-					report.getKeycode(5));
-			
-			this.optionListener.onOptionEvent(report);
-		
-		}else if(value>8 && !this.direction.equals(Direction.LEFT)){
-			this.direction = Direction.LEFT;
-			
-			report.setKeycodes(
-					report.getKeycode(0),
-					report.getKeycode(1),
-					report.getKeycode(2),
-					report.getKeycode(3),
-					0x50,
-					report.getKeycode(5));
-			
-			this.optionListener.onOptionEvent(report);
-			
-		}else if (Math.abs(value)<9 && !this.direction.equals(Direction.NEUTRAL)){
-			this.direction = Direction.NEUTRAL;
-			
-			report.setKeycodes(
-					report.getKeycode(0),
-					report.getKeycode(1),
-					report.getKeycode(2),
-					report.getKeycode(3),
-					HIDReportKeyboard.EMPTY_KEYCODE,
-					report.getKeycode(5));
-			
-			this.optionListener.onOptionEvent(report);
-			
-		}
-	}
+//	@Override
+//	public void onAccuracyChanged(Sensor arg0, int arg1) {
+//		
+//	}
+//
+//	@Override
+//	public void onSensorChanged(SensorEvent event) {
+//
+//		if(!this.optionActive) return;
+//		
+//		int value = (int) event.values[1];
+//		
+//		if(value<-8 && !this.direction.equals(Direction.RIGHT)){
+//			this.direction = Direction.RIGHT;
+//			
+//			report.setKeycodes(
+//					report.getKeycode(0),
+//					report.getKeycode(1),
+//					report.getKeycode(2),
+//					report.getKeycode(3),
+//					0x4F,
+//					report.getKeycode(5));
+//			
+//			this.optionListener.onOptionEvent(report);
+//		
+//		}else if(value>8 && !this.direction.equals(Direction.LEFT)){
+//			this.direction = Direction.LEFT;
+//			
+//			report.setKeycodes(
+//					report.getKeycode(0),
+//					report.getKeycode(1),
+//					report.getKeycode(2),
+//					report.getKeycode(3),
+//					0x50,
+//					report.getKeycode(5));
+//			
+//			this.optionListener.onOptionEvent(report);
+//			
+//		}else if (Math.abs(value)<9 && !this.direction.equals(Direction.NEUTRAL)){
+//			this.direction = Direction.NEUTRAL;
+//			
+//			report.setKeycodes(
+//					report.getKeycode(0),
+//					report.getKeycode(1),
+//					report.getKeycode(2),
+//					report.getKeycode(3),
+//					HIDReportKeyboard.EMPTY_KEYCODE,
+//					report.getKeycode(5));
+//			
+//			this.optionListener.onOptionEvent(report);
+//			
+//		}
+//	}
 
 
 	public void handleEvent(MotionEvent event) {
@@ -255,6 +261,60 @@ public class Gamepad extends Option implements SensorEventListener {
 		}
 		
 		return buttonsTouched;
+		
+	}
+
+	@Override
+	public void onEvent(float[] values) {
+
+		if(!this.optionActive) return;
+		
+		int value = (int) values[1];
+		
+		if(value<-8 && !this.direction.equals(Direction.RIGHT)){
+			this.direction = Direction.RIGHT;
+			
+			report.setKeycodes(
+					report.getKeycode(0),
+					report.getKeycode(1),
+					report.getKeycode(2),
+					report.getKeycode(3),
+					0x4F,
+					report.getKeycode(5));
+			
+			this.optionListener.onOptionEvent(report);
+		
+		}else if(value>8 && !this.direction.equals(Direction.LEFT)){
+			this.direction = Direction.LEFT;
+			
+			report.setKeycodes(
+					report.getKeycode(0),
+					report.getKeycode(1),
+					report.getKeycode(2),
+					report.getKeycode(3),
+					0x50,
+					report.getKeycode(5));
+			
+			this.optionListener.onOptionEvent(report);
+			
+		}else if (Math.abs(value)<9 && !this.direction.equals(Direction.NEUTRAL)){
+			this.direction = Direction.NEUTRAL;
+			
+			report.setKeycodes(
+					report.getKeycode(0),
+					report.getKeycode(1),
+					report.getKeycode(2),
+					report.getKeycode(3),
+					HIDReportKeyboard.EMPTY_KEYCODE,
+					report.getKeycode(5));
+			
+			this.optionListener.onOptionEvent(report);
+		}
+		
+	}
+
+	@Override
+	public void onAccuracyChange(int accuracy) {
 		
 	}
 

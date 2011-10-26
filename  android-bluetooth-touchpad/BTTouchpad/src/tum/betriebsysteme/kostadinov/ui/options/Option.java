@@ -37,6 +37,7 @@ public abstract class Option {
 	public static final int OPTION_PAINTPAD_INDEX 	= 4;
 	public static final int OPTION_VOICE_INDEX 		= 5;
 	public static final int OPTION_GAMEPAD_INDEX 	= 6;
+	public static final int OPTION_PREZI_INDEX		= 7; 
 	
 	public static boolean optionActive;
 	
