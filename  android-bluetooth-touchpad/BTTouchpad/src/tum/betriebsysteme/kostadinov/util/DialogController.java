@@ -87,7 +87,12 @@ public class DialogController {
 			builder.setTitle(title);
 			builder.setCancelable(cancelable);
 			alertDialog = builder.create();
+			
+			try{
 			alertDialog.show();
+			}catch (Exception e){
+				//Might throw Exeption in onDestroy
+			}
 		}
 		
 	}

@@ -40,13 +40,63 @@ public class PointerAbsolute extends Pointer {
 		super(optionListener);
 	}	
 
-	@Override
-	public void onSensorChanged(SensorEvent event) {
+//	@Override
+//	public void onSensorChanged(SensorEvent event) {
+//	
+//		if (!optionActive) return;
+//		
+//		x = event.values[0];
+//		y = event.values[1];
+//		
+//		Log.v("POINTER", "x: "+ x+ " y: "+y);
+//			
+//		// Format y
+//		float formY = (Math.abs(y) > MAX_DEGREE_HANDLED) ? 
+//				 (y < 0) ? -MAX_DEGREE_HANDLED: MAX_DEGREE_HANDLED : y;
+//		
+//		float coordY = (HIDReportMouseAbsolute.MAX_VALUE_COORDINATE/2) +
+//		((formY/MAX_DEGREE_HANDLED)*(HIDReportMouseAbsolute.MAX_VALUE_COORDINATE/2));
+//		
+//		movementYFirstByte = coordY % 0xff;
+//		movementYSecondByte = (((int) coordY) / 0xff);
+//		
+//		float formX;
+//		
+//		if( initialX < MAX_DEGREE_HANDLED && x > MAX_DEGREE-MAX_DEGREE_HANDLED )
+//			formX = (x - (initialX+MAX_DEGREE));
+//		
+//		else if( initialX > MAX_DEGREE-MAX_DEGREE_HANDLED && x < MAX_DEGREE_HANDLED )
+//			formX = ((x+MAX_DEGREE) -initialX);
+//		else			
+//			formX = x-initialX;
+//		
+//		formX = (Math.abs(formX) > MAX_DEGREE_HANDLED) ? 
+//				 (formX < 0) ? -MAX_DEGREE_HANDLED: MAX_DEGREE_HANDLED : formX;
+//		
+//		float coordX = (HIDReportMouseAbsolute.MAX_VALUE_COORDINATE/2) +
+//		((formX/MAX_DEGREE_HANDLED)*(HIDReportMouseAbsolute.MAX_VALUE_COORDINATE/2));
+//		
+//		movementXFirstByte = coordX % 0xff;
+//		movementXSecondByte = (((int) coordX) / 0xff);
+//		
+//		HIDReportMouseAbsolute mouseReport = new HIDReportMouseAbsolute();
+//		mouseReport.setPosition(
+//				(byte) movementXFirstByte,
+//				(byte) movementXSecondByte,
+//				(byte) movementYFirstByte,
+//				(byte) movementYSecondByte);
+//		
+//		this.optionListener.onOptionEvent(mouseReport);
+//	
+//	}
 	
+	@Override
+	public void onEvent(float[] values) {
+		
 		if (!optionActive) return;
 		
-		x = event.values[0];
-		y = event.values[1];
+		x = values[0];
+		y = values[1];
 		
 		Log.v("POINTER", "x: "+ x+ " y: "+y);
 			
@@ -87,7 +137,8 @@ public class PointerAbsolute extends Pointer {
 				(byte) movementYSecondByte);
 		
 		this.optionListener.onOptionEvent(mouseReport);
-	
+		
+		
 	}
 	
 	@Override

@@ -23,6 +23,8 @@ package tum.betriebsysteme.kostadinov.ui.options;
 import tum.betriebsysteme.kostadinov.R;
 import tum.betriebsysteme.kostadinov.btframework.report.HIDReportMouseRelative;
 import tum.betriebsysteme.kostadinov.util.ActivityResource;
+import tum.betriebsysteme.kostadinov.util.SensorUtility;
+import tum.betriebsysteme.kostadinov.util.SensorUtility.SensorListener;
 import tum.betriebsysteme.kostadinov.util.State;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -37,9 +39,9 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup;
 
-public class Pointer extends Option implements SensorEventListener, OnClickListener, OnLongClickListener{
+public class Pointer extends Option implements OnClickListener, OnLongClickListener, SensorListener{
 
-	private SensorManager sensorManager;
+	private SensorUtility sensorUtil;
 	
 	protected final float MAX_DEGREE = 360.0f;
 	protected static final float MAX_DEGREE_HANDLED = 30.0f;
@@ -73,48 +75,43 @@ public class Pointer extends Option implements SensorEventListener, OnClickListe
 		main.addView(pointer, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 		main.invalidate();
 		
-		
-		sensorManager = (SensorManager) ActivityResource.get().getSystemService(Context.SENSOR_SERVICE);
-        
-        sensorManager.registerListener(this,
-				sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
-				SensorManager.SENSOR_DELAY_UI);
-		
+		this.sensorUtil = SensorUtility.createInstance();
+		this.sensorUtil.startListening(true, true, false, this);
         optionActive = true;
 		
 	}
 
 	@Override
 	public void destroyOptionUI() {
-		sensorManager.unregisterListener(this);
-		sensorManager = null;
+		this.sensorUtil.cancel();
+		sensorUtil = null;
 		optionActive = false;
 		
 	}
 
-	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		Pointer.accuracy = accuracy;
-	}
-
-	@Override
-	public void onSensorChanged(SensorEvent event) {
-	
-		if (!optionActive) return;
-		
-		x = event.values[0];
-		y = event.values[1];
-		
-		
-		if(Math.abs(x) < accuracy && Math.abs(y) < accuracy) return;
-		
-		HIDReportMouseRelative mouseReport = new HIDReportMouseRelative();
-		mouseReport.setMovement( (Math.abs(x) < accuracy) ? 0 : (x - initialX) % HIDReportMouseRelative.MAX_MOUSE_MOVEMENT ,
-								 (Math.abs(y) < accuracy) ? 0 : (y - initialY) % HIDReportMouseRelative.MAX_MOUSE_MOVEMENT );
-		
-		this.optionListener.onOptionEvent(mouseReport);
-		
-	}
+//	@Override
+//	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+//		Pointer.accuracy = accuracy;
+//	}
+//
+//	@Override
+//	public void onSensorChanged(SensorEvent event) {
+//	
+//		if (!optionActive) return;
+//		
+//		x = event.values[0];
+//		y = event.values[1];
+//		
+//		
+//		if(Math.abs(x) < accuracy && Math.abs(y) < accuracy) return;
+//		
+//		HIDReportMouseRelative mouseReport = new HIDReportMouseRelative();
+//		mouseReport.setMovement( (Math.abs(x) < accuracy) ? 0 : (x - initialX) % HIDReportMouseRelative.MAX_MOUSE_MOVEMENT ,
+//								 (Math.abs(y) < accuracy) ? 0 : (y - initialY) % HIDReportMouseRelative.MAX_MOUSE_MOVEMENT );
+//		
+//		this.optionListener.onOptionEvent(mouseReport);
+//		
+//	}
 
 	@Override
 	public void onClick(View view) {
@@ -141,6 +138,30 @@ public class Pointer extends Option implements SensorEventListener, OnClickListe
 		ActivityResource.vibrate(ActivityResource.VIB_MIDDLE);
 		
 		return true;
+	}
+
+	@Override
+	public void onEvent(float[] values) {
+
+		if (!optionActive) return;
+		
+		x = values[0];
+		y = values[1];
+		
+		
+		if(Math.abs(x) < accuracy && Math.abs(y) < accuracy) return;
+		
+		HIDReportMouseRelative mouseReport = new HIDReportMouseRelative();
+		mouseReport.setMovement( (Math.abs(x) < accuracy) ? 0 : (x - initialX) % HIDReportMouseRelative.MAX_MOUSE_MOVEMENT ,
+								 (Math.abs(y) < accuracy) ? 0 : (y - initialY) % HIDReportMouseRelative.MAX_MOUSE_MOVEMENT );
+		
+		this.optionListener.onOptionEvent(mouseReport);
+	}
+
+	@Override
+	public void onAccuracyChange(int accuracy) {
+		Pointer.accuracy = accuracy;
+		
 	}
 
 }
