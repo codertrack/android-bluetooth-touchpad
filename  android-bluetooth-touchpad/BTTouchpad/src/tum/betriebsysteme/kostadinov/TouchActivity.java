@@ -43,6 +43,7 @@ import tum.betriebsysteme.kostadinov.util.CONSTANTS;
 import tum.betriebsysteme.kostadinov.util.DeviceDiscovery;
 import tum.betriebsysteme.kostadinov.util.DialogController;
 import tum.betriebsysteme.kostadinov.util.State;
+import tum.betriebsysteme.kostadinov.util.WakeLocker;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
@@ -97,6 +98,7 @@ public class TouchActivity extends Activity implements
     @Override
     public void onStart(){
     	super.onStart();
+    	WakeLocker.acquireWakeLocker();
     	Log.v(TAG, "onStart()");
     }
     
@@ -104,6 +106,7 @@ public class TouchActivity extends Activity implements
     public void onPause(){
     	super.onPause();
     	Log.v(TAG, "onPuase()");
+    	WakeLocker.releaseWakeLocker();
     	
     	
     }  

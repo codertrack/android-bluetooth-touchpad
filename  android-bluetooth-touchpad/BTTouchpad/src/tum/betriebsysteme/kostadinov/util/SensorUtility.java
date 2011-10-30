@@ -6,8 +6,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-
-
 public class SensorUtility implements SensorEventListener {
 
 	private SensorUtility(){}
@@ -102,10 +100,5 @@ public class SensorUtility implements SensorEventListener {
 		return result/fiboSum;
 		
 	}
-	
-	
-	
-	
-	
-	
+
 }
